@@ -32,6 +32,8 @@
 (require 'dash)
 (require 'seq)
 
+(eval-when-compile
+  (require 'cl-macs))
 
 (defgroup helm-icons nil
   "Helm treemacs icons."
