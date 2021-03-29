@@ -87,7 +87,9 @@ CANDIDATES is the list of candidates."
           (cons (concat
                  (with-current-buffer buffer
                    (if (eq helm-icons-provider 'all-the-icons)
-                       (concat (all-the-icons-icon-for-buffer) " ")
+                       (condition-case nil
+                           (concat (all-the-icons-icon-for-buffer) " ")
+                         (error (concat (all-the-icons-faicon "question") " ")))
                      (or (-some->> (assoc major-mode helm-icons-mode->icon)
                            (cl-rest)
                            helm-icons--get-icon)
