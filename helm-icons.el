@@ -34,6 +34,8 @@
 
 (eval-when-compile
   (require 'cl-macs))
+(require 'f)
+(require 'all-the-icons nil t)
 
 (defgroup helm-icons nil
   "Helm treemacs icons."
@@ -60,8 +62,11 @@
                  ((symbolp file) file)
                  ((f-dir? file) 'dir-closed)
                  ((f-file? file) (f-ext file)))))
-      (treemacs-get-icon-value icon nil (treemacs-theme->name (treemacs-current-theme))))))
-
+      (let* ((theme (treemacs--find-theme
+                     (treemacs-theme->name
+                      (treemacs-current-theme))))
+             (icons (treemacs-theme->gui-icons theme)))
+        (ht-get icons icon)))))
 
 (defun helm-icons--get-icon (file)
   "Get icon for FILE."
@@ -128,7 +133,7 @@ ORIG is the original function.
 NAME, CLASS and ARGS are the original params."
   (let ((result (apply orig name class args)))
     (cl-case class
-      ((helm-recentf-source helm-source-ffiles helm-locate-source helm-fasd-source)
+      ((helm-recentf-source helm-source-ffiles helm-locate-source helm-fasd-source helm-ls-git-source)
        (helm-icons-add-transformer
         #'helm-icons-files-add-icons
         result))
